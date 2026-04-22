@@ -1,78 +1,106 @@
 from fastapi import FastAPI, HTTPException
-from src.models.data import users
-from src.schemas.schemas import User
-from src.schemas.schemas import UpdateUser
+from sqlalchemy import text
+# from src.schemas.schemas import User, UserMail
+from src.models.models import users_table, metadata_object
+from src.config.config import settings
+from src.core.core import engine
 
 app = FastAPI()
 
-# Получение всех user'ов
+# Получить всех user'ов
 
 @app.get(
-    "/users/{all_users}",
+    "/users",
     tags=["Users"],
-    summary="Get all users")
-
-def get_users():
-    return users
-
-
-# Получение user'а по id
-
-@app.get(
-    "/users/{user_id}",
-    tags=["Users"],
-    summary="Get user by id"
+    summary="Get all users"
 )
 
-def get_user_by_id(id: int):
-    if id > len(users) or id == 0 or id < 0:
-        raise HTTPException(status_code=404, detail="User with that id doesn't exist.")
-    else:
-        return users[id-1]
+def get_users():
+    with engine.connect() as conn:
+        query = "SELECT * FROM users ORDER BY id ASC"
+        result = conn.execute(text(query))
+        return f"{result.all()}"
 
+# Создать новую таблицу
 
-# Добавление user'ов
+@app.get(
+    "/users/{new_table}",
+    tags=["Users"],
+    summary="Create Users table"
+)
+
+def create_table():
+    metadata_object.create_all(engine)
+    return {"OK": True, "message": "Table Users has been succesfuly created"}
+
+# Добавить нового юзера
 
 @app.post(
-    "/users",
+    "/users/{new_user}",
     tags=["Users"],
     summary="Add new user"
 )
 
-def post_user(new_user: User):
-    users.append({
-        "id": len(users) + 1,
-        "username": new_user.username,
-        "bio": new_user.bio,
-        "email": new_user.email
-    })
-    return {"OK": True, "message": "New user added"}
+def add_user(username: str, email: str):
+    with engine.connect() as conn:
+        query = f"""INSERT INTO users (username, email) VALUES ('{username}', '{email}')"""
+        conn.execute(text(query))
+        conn.commit()
+        return {"OK": True, "message": f"{username} has been succesfuly created!"}
 
-# Обновление user'ов
+# Обновить существующего юзера
 
 @app.put(
-    "/users",
+    "/users/{user_update}",
     tags=["Users"],
     summary="Update user by id"
 )
 
-def update_user(id: int, new_data: User):
-    user = users[id-1]
-    user.update({
-        "username": new_data.username,
-        "bio": new_data.bio,
-        "email": new_data.email
-    })
-    return {"OK": True, "message": f"user {id} has been updated!"}
+def update_user(id: int, new_username: str, new_email: str):
+    if id <= 0:
+        raise HTTPException(status_code=404, detail="Invalid id")
+    else:
+        with engine.connect() as conn:
+            check_query = text(f"""SELECT id FROM users WHERE id = {id}""")
+            result = conn.execute(check_query)
+            if result.fetchone() is None:
+                raise HTTPException(status_code=404, detail=f"User {id} doesn't exist")
+            else:
+                query = f"""UPDATE users SET username = '{new_username}', email = '{new_email}' WHERE id = {id};"""
+                conn.execute(text(query))
+                conn.commit()
+                return {"OK": True, "message": f"{id} has been updated: new username - {new_username}; new email - {new_email}"}
 
-# Удаление user'ов
+# Удалить существующего юзера
+
+@app.delete(
+    "/users/{user_delete}",
+    tags=["Users"],
+    summary="Delete user by his id"
+)
+
+def delete_user(id: int):
+    # Проверка
+    if id <= 0:
+        raise HTTPException(status_code=404, detail="Invalid id")
+    else:
+        with engine.connect() as conn:
+            check_query = text(f"""SELECT id FROM users WHERE id = {id}""")
+            result = conn.execute(check_query)
+            if result.fetchone() is None:
+                raise HTTPException(status_code=404, detail=f"User {id} doesn't exist")
+            else:
+                query = text(f"""DELETE FROM users WHERE id = {id}""")
+                conn.execute(query)
+                conn.commit()
+                return {"OK": True, "message": f"{id} user has been deleted"}
 
 @app.delete(
     "/users",
     tags=["Users"],
-    summary="Delete user by id"
+    summary="Delete users table"
 )
 
-def delete_user(id: int):
-    users.pop(id-1)
-    return {"OK": True, "message": f"user {id} has been deleted!"}
+def delete_table():
+        metadata_object.drop_all(engine)
+        return {"OK": True, "message": "Users table has been succesfuly deleted!"}
