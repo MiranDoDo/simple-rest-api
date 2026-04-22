@@ -1,13 +1,12 @@
-# simple-crud-api
+# simple-REST-api
 
-**The simplest CRUD API in Python3 using FastAPI and pydantic for data validation**
+**The simplest REST API in Python3 using FastAPI and pydantic for data validation**
 
 # Features
 
 - Read all users
-- Read users by id
 - Add new users
-- Update users
+- Update users by id
 - Delete users by id
 
 # How to work with this repo
@@ -24,10 +23,16 @@ git clone https://github.com/MiranDoDo/simple-crud-api.git
 cd fastapi/src
 ```
 
+**Enter into venv**
+
+```bash
+. /venv/bin/activate
+```
+
 **3. Install Dependencies**
 
 ```bash
-pip install fastapi uvicorn pydantic
+pip install fastapi[standard] uvicorn pydantic sqlalchemy
 ```
 
 **4. Run**
