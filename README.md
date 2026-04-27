@@ -4,6 +4,7 @@
 
 # Features
 
+- Read user by id
 - Read all users
 - Add new users
 - Update users by id
