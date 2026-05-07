@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from sqlalchemy.orm import DeclarativeBase
 
 class User(BaseModel):
 
@@ -13,7 +12,3 @@ class UserUpdate(User):
 
 class UserDelete(BaseModel):
     id: int
-
-
-class Base(DeclarativeBase):
-    pass

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/main.js"></script>
+</head>
+<body>
+
+<h3>Admin Panel</h3>
+
+<h2>Data</h2>
+
+<div>
+    Enter user id <br>
+    <input type="number" id="id_user"> <br>
+    Enter username <br>
+    <input id="username" name="username"><br>
+    Enter email <br>
+    <input id="email" name="email"> <br>
+</div>
+
+<h2>Actions</h2>
+
+<button onclick="get_users()">Get all users</button> <br>
+<button onclick="get_user_by_id()">Read user by id</button> <br>
+<button onclick="add_user()">Add new user </button> <br>
+<button onclick="update_user()">Update user by id</button> <br>
+<button onclick="delete_user()">Delete user by id</button> <br>
+<button onclick="create_table()">Create users table in SQL DataBase</button> <br>
+<button onclick="delete_table()">Delete users table in SQL DataBase</button>
+
+<h2>User list</h2>
+
+<div id="users"></div>
+
+</body>
+</html>

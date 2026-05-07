@@ -12,7 +12,16 @@
 
 # How to work with this repo
 
-**1. Clone the repository**
+**1. Install PostgreSQL and setup DataBase**
+
+```bash
+sudo apt install postgresql postgresql-contrib
+```
+- DB Name must be 'learn_sql'
+- DB Password must be 1234
+
+
+**2. Clone the repository**
 
 ```bash
 git clone https://github.com/MiranDoDo/simple-crud-api.git
@@ -30,13 +39,8 @@ cd fastapi/src
 . /venv/bin/activate
 ```
 
-**3. Install Dependencies**
 
-```bash
-pip install fastapi[standard] uvicorn pydantic sqlalchemy
-```
-
-**4. Run**
+**3. Run**
 
 ```bash
 fastapi dev main.py
