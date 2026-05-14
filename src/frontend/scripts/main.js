@@ -13,19 +13,30 @@ async function get_users() {
 // Получить юзера по id
 async function get_user_by_id() {
 
-    var id = document.getElementById("id_user").value
+    const id = document.getElementById("id_user").value
 
     const response = await fetch(
         `/db/users/${id}`, {
-        method: "GET"
+        method: "POST",
+        headers: {"Accept": "application/json", "Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: id
+        })
     })
+
     if(response.ok){
         const data = await response.json()
         document.getElementById("users").textContent = data.message
     }
-    else{
+
+    else if(response.status == 405) {
         const error = await response.json()
         document.getElementById("users").textContent = error.detail
+    }
+
+    else{
+        const error = await response.json()
+        document.getElementById("users").textContent = `${error.detail[0]?.msg}`
     }
 }
 
@@ -55,6 +66,8 @@ async function add_user() {
     }
 }
 
+// Обновить user'a по id
+
 async function update_user() {
 
     const id = document.getElementById("id_user").value
@@ -76,6 +89,11 @@ async function update_user() {
         const answer = await response.json()
         document.getElementById("users").textContent = answer.message
     }
+    
+    else if(response.status == 405) {
+        const error = await response.json()
+        document.getElementById("users").textContent = error.detail
+    }
 
     else{
         const error = await response.json()
@@ -86,7 +104,7 @@ async function update_user() {
 // Удалить юзера по id
 async function delete_user() {
 
-    var id = document.getElementById("id_user").value
+    const id = document.getElementById("id_user").value
 
     const response = await fetch(
         `/db/users/${id}`, {
@@ -100,11 +118,19 @@ async function delete_user() {
         const data = await response.json()
         document.getElementById("users").textContent = data.message
     }
+
+    else if(response.status == 422) {
+        const error = await response.json()
+        document.getElementById("users").textContent = `${error.detail[0]?.msg}`
+    }
+
     else{
         const error = await response.json()
         document.getElementById("users").textContent = error.detail
     }
 }
+
+// Создать таблицу users в DataBase
 
 async function create_table() {
     const response = await fetch(
@@ -116,6 +142,8 @@ async function create_table() {
         document.getElementById("users").textContent = data.message
     }
 }
+
+// Удалить таблицу users в DataBase
 
 async function delete_table() {
     const response = await fetch(
