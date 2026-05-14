@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from pathlib import Path
-from backend.schemas.schemas import User, UserUpdate, UserDelete
+from backend.schemas.schemas import User, UserUpdate, UserID
 from backend.models.models import metadata_object
 from backend.core.core import sync_session, engine
 
@@ -24,24 +24,21 @@ def get_users():
 
 # Получить user'a по id
 
-@app.get(
+@app.post(
         "/db/users/{id}",
         tags=["Users"],
         summary="Get user by id"
 )
 
 
-def get_user_by_id(id: int):
-    if id <= 0:
-        raise HTTPException(status_code=404, detail="Invalid id")
-    else:
+def get_user_by_id(user_id: UserID):
         with sync_session() as conn:
-            check_query = text(f"""SELECT id FROM users WHERE id = {id}""")
+            check_query = text(f"""SELECT id FROM users WHERE id = {user_id.id}""")
             result = conn.execute(check_query)
             if result.fetchone() is None:
-                raise HTTPException(status_code=404, detail="User id doesn't exist")
+                raise HTTPException(status_code=405, detail=f"User with id {user_id.id} doesn't exist")
             elif result.fetchone is not None:
-                query = text(f"""SELECT * FROM users WHERE id = {id}""")
+                query = text(f"""SELECT * FROM users WHERE id = {user_id.id}""")
                 result = conn.execute(query)
                 return {"message": f"{result.all()}"}
 
@@ -84,14 +81,11 @@ def add_user(user: User):
 )
 
 def update_user(user: UserUpdate):
-    if user.id <= 0:
-        raise HTTPException(status_code=404, detail="Invalid id")
-    else:
         with sync_session() as conn:
             check_query = text(f"""SELECT id FROM users WHERE id = {user.id}""")
             result = conn.execute(check_query)
             if result.fetchone() is None:
-                raise HTTPException(status_code=404, detail=f"User {id} doesn't exist")
+                raise HTTPException(status_code=405, detail=f"User with id {user.id} doesn't exist")
             else:
                 query = text(f"""UPDATE users SET user_name = '{user.username}', email = '{user.email}' WHERE id = {user.id};""")
                 conn.execute(query)
@@ -101,26 +95,22 @@ def update_user(user: UserUpdate):
 # Удалить существующего user'a
 
 @app.delete(
-    "/db/users",
+    "/db/users/{id}",
     tags=["Users"],
     summary="Delete user by his id"
 )
 
-def delete_user(id: UserDelete):
-    # Проверка
-    if id.id <= 0:
-        raise HTTPException(status_code=404, detail="Invalid id")
-    else:
+def delete_user(user_id: UserID):
         with sync_session() as conn:
-            check_query = text(f"""SELECT id FROM users WHERE id = {id.id}""")
+            check_query = text(f"""SELECT id FROM users WHERE id = {user_id.id}""")
             result = conn.execute(check_query)
             if result.fetchone() is None:
-                raise HTTPException(status_code=404, detail=f"User {id.id} doesn't exist")
+                raise HTTPException(status_code=405, detail=f"User with id {user_id.id} doesn't exist")
             else:
-                query = text(f"""DELETE FROM users WHERE id = {id.id}""")
+                query = text(f"""DELETE FROM users WHERE id = {user_id.id}""")
                 conn.execute(query)
                 conn.commit()
-                return {"OK": True, "message": f"{id.id} user has been deleted"}
+                return {"OK": True, "message": f"{user_id.id} user has been deleted"}
 
 # Удалить таблицу users из базы данных
 

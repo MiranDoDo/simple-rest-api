@@ -8,7 +8,7 @@ class User(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 class UserUpdate(User):
-    id: int
+    id: int = Field(gt=0)
 
-class UserDelete(BaseModel):
-    id: int
+class UserID(BaseModel):
+    id: int = Field(gt=0)
