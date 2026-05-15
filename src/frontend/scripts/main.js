@@ -30,10 +30,14 @@ async function get_user_by_id() {
     }
 
     else if(response.status == 405) {
+        if(id != ""){
         const error = await response.json()
         document.getElementById("users").textContent = error.detail
+        }
+        else if(id == ""){
+            document.getElementById("users").textContent = "Must be a number"
+        }
     }
-
     else{
         const error = await response.json()
         document.getElementById("users").textContent = `${error.detail[0]?.msg}`
@@ -89,12 +93,16 @@ async function update_user() {
         const answer = await response.json()
         document.getElementById("users").textContent = answer.message
     }
-    
+
     else if(response.status == 405) {
+        if(id != ""){
         const error = await response.json()
         document.getElementById("users").textContent = error.detail
+        }
+        else if(id == ""){
+            document.getElementById("users").textContent = "Must be a number"
+        }
     }
-
     else{
         const error = await response.json()
         document.getElementById("users").textContent = `${error.detail[0]?.msg}`
@@ -119,14 +127,18 @@ async function delete_user() {
         document.getElementById("users").textContent = data.message
     }
 
-    else if(response.status == 422) {
-        const error = await response.json()
-        document.getElementById("users").textContent = `${error.detail[0]?.msg}`
-    }
-
-    else{
+    else if(response.status == 405) {
+        if(id != ""){
         const error = await response.json()
         document.getElementById("users").textContent = error.detail
+        }
+        else if(id == ""){
+            document.getElementById("users").textContent = "Must be a number"
+        }
+    }
+    else{
+        const error = await response.json()
+        document.getElementById("users").textContent = `${error.detail[0]?.msg}`
     }
 }
 
