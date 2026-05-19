@@ -37,7 +37,7 @@ def get_user_by_id(user_id: UserID):
             result = conn.execute(check_query)
             if result.fetchone() is None:
                 raise HTTPException(status_code=405, detail=f"User with id {user_id.id} doesn't exist")
-            elif result.fetchone is not None:
+            else:
                 query = text(f"""SELECT * FROM users WHERE id = {user_id.id}""")
                 result = conn.execute(query)
                 return {"message": f"{result.all()}"}
