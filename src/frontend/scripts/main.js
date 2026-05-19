@@ -1,3 +1,5 @@
+'use strict';
+
 // Получить всех юзеров
 async function get_users() {
     const response = await fetch(

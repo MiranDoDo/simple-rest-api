@@ -1,3 +1,5 @@
+'use strict';
+
 // Получение юзера по id
 function button_id() {
 
@@ -66,6 +68,7 @@ function button_add_user() {
     actions = document.getElementById("actions")
 
     input_div = document.createElement("div")
+    input_div.setAttribute("id", "input_div")
 
     button_fetch = document.createElement("button")
     button_fetch_text = document.createTextNode("post")
@@ -101,6 +104,7 @@ function button_update_user() {
     actions = document.getElementById("actions")
 
     input_div = document.createElement("div")
+    input_div.setAttribute("id", "input_div")
 
     button_fetch = document.createElement("button")
     button_fetch_text = document.createTextNode("post")
