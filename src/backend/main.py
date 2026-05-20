@@ -16,7 +16,7 @@ app = FastAPI()
     summary="Get all users"
 )
 
-def get_users():
+async def get_users():
     with sync_session() as conn:
         query = "SELECT * FROM users ORDER BY id ASC"
         result = conn.execute(text(query))
