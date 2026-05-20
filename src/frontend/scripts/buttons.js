@@ -1,5 +1,3 @@
-'use strict';
-
 // Получение юзера по id
 function button_id() {
 
