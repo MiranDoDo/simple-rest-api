@@ -24,10 +24,10 @@ function button_id() {
     button_fetch.appendChild(button_fetch_text)
     button_fetch.setAttribute("onclick", "get_user_by_id()")
 
-    input_div.appendChild(input_quest)
-    input_div.appendChild(input_br)
-    input_div.appendChild(input_pole)
-    input_div.appendChild(button_fetch)
+    input_div.append(
+        input_quest, input_br,
+        input_pole, button_fetch
+    )
 
     document.body.insertBefore(input_div, actions)
 }
@@ -58,10 +58,10 @@ function button_delete_id() {
     button_fetch.appendChild(button_fetch_text)
     button_fetch.setAttribute("onclick", "delete_user()")
 
-    input_div.appendChild(input_quest)
-    input_div.appendChild(input_br)
-    input_div.appendChild(input_pole)
-    input_div.appendChild(button_fetch)
+    input_div.append(
+        input_quest, input_br,
+        input_pole, button_fetch
+    )
 
     document.body.insertBefore(input_div, actions)
 }
@@ -101,15 +101,11 @@ function button_add_user() {
     button_fetch.appendChild(button_fetch_text)
     button_fetch.setAttribute("onclick", "add_user()")
 
-    input_div.appendChild(input_username)
-    input_div.appendChild(input_br1)
-    input_div.appendChild(input_pole1)
-    input_div.appendChild(input_br2)
-    input_div.appendChild(input_email)
-    input_div.appendChild(input_br3)
-    input_div.appendChild(input_pole2)
-    input_div.appendChild(input_br4)
-    input_div.appendChild(button_fetch)
+    input_div.append(
+        input_username, input_br1, input_pole1,
+        input_br2, input_email, input_br3,
+        input_pole2, input_br4, button_fetch
+    )
 
     document.body.insertBefore(input_div, actions)
 }
@@ -158,19 +154,12 @@ function button_update_user() {
     button_fetch.setAttribute("onclick", "update_user()")
 
 
-    input_div.appendChild(input_id)
-    input_div.appendChild(input_br1)
-    input_div.appendChild(input_pole1)
-    input_div.appendChild(input_br2)
-    input_div.appendChild(input_username)
-    input_div.appendChild(input_br3)
-    input_div.appendChild(input_pole2)
-    input_div.appendChild(input_br4)
-    input_div.appendChild(input_email)
-    input_div.appendChild(input_br5)
-    input_div.appendChild(input_pole3)
-    input_div.appendChild(input_br6)
-    input_div.appendChild(button_fetch)
+    input_div.append(
+        input_id, input_br1, input_pole1,
+        input_br2, input_username, input_br3,
+        input_pole2, input_br4, input_email,
+        input_br5, input_pole3, input_br6, button_fetch
+    )
 
     document.body.insertBefore(input_div, actions)
 }
