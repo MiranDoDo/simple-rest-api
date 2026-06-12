@@ -32,7 +32,7 @@ sudo dnf install postgresql-server postgresql
 **2. Clone the repository**
 
 ```bash
-git clone https://github.com/MiranDoDo/simple-crud-api.git
+https://github.com/MiranDoDo/simple-rest-api.git
 ```
 
 **3. Go to the repository folder**
