@@ -26,8 +26,6 @@ Fedora Linux:
 ```bash
 sudo dnf install postgresql-server postgresql
 ```
-- DB Name must be 'learn_sql'
-- DB Password must be 1234
 
 **2. Clone the repository**
 
